@@ -85,8 +85,8 @@ type CouchDBController struct {
 	DBUrl    string
 }
 
-// Begin is an interceptor function called at the start of a Revel request. 
-// If the the username and password are defined they are constructed into a 
+// Begin is an interceptor function called at the start of a Revel request.
+// If the the username and password are defined they are constructed into a
 // credentials string to be added to the database connection URL. The HTTPS
 // option is also set if defined. The connection URL string is stored into
 // DBUrl and the database object is stored in Database.
