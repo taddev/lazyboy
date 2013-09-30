@@ -6,34 +6,39 @@ import (
 )
 
 var (
-	Url      string
-	Port     string
-	Username string
-	Password string
-	Name     string
+	lbUrl      string
+	lbPort     string
+	lbUsername string
+	lbPassword string
+	lbName     string
 )
 
 func AppInit() {
 	var found bool
-	if Url, found = revel.Config.String("couchdb.url"); !found {
+	if lbUrl, found = revel.Config.String("couchdb.url"); !found {
 		err := errors.New("lazyboy: Database URL not defined in app.conf")
 		revel.ERROR.Panic(err)
 	}
 
-	if Port, found = revel.Config.String("couchdb.port"); !found {
-		Port = "5984"
+	if lbPort, found = revel.Config.String("couchdb.port"); !found {
+		lbPort = "5984"
 	}
 
-	if Username, found = revel.Config.String("couchdb.username"); !found {
-		Username = ""
+	if lbUsername, found = revel.Config.String("couchdb.username"); !found {
+		lbUsername = ""
 	}
 
-	if Password, found = revel.Config.String("couchdb.password"); !found {
-		Password = ""
+	if lbPassword, found = revel.Config.String("couchdb.password"); !found {
+		lbPassword = ""
 	}
 
-	if Name, found = revel.Config.String("couchdb.name"); !found {
+	if lbName, found = revel.Config.String("couchdb.name"); !found {
 		err := errors.New("lazyboy: Database name not defined in app.conf")
 		revel.ERROR.Panic(err)
 	}
+}
+
+type LazyboyController struct {
+	*revel.Controller
+	
 }
