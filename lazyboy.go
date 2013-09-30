@@ -16,6 +16,8 @@
    along with this program.  If not, see [http://www.gnu.org/licenses/].
 */
 
+// Package lazyboy wraps a CouchDB connection into a module for use with the
+// Revel framework.
 package lazyboy
 
 import (
@@ -25,14 +27,18 @@ import (
 )
 
 var (
-	Url      string
-	Port     string //optional, will be set to 5984 by default
-	Username string
-	Password string
-	Database string
-	Https    bool //optional, will be set to false by default
+	Url      string //required, the URL or IP address to the CouchDB instance
+	Port     string //optional, the port the CouchDB instance is listening on (default=5984)
+	Username string //optional, the username for access to the database (default="")
+	Password string //optional, the password for access to the database (default="")
+	Database string //required, the name of the database
+	Https    bool   //optional, uses HTTPS to make the database connections (default="false")
 )
 
+// AppInit pulls the configuration options out of the app.conf file in a Revel application
+// and stores them locally for use in the database connection. For optional configurations
+// their defaults are set if they are not configured. For required configurations and error
+// message is created and a Panic is send to Revel to kill the application.
 func AppInit() {
 	var found bool
 	if Url, found = revel.Config.String("couchdb.url"); !found {
@@ -62,17 +68,28 @@ func AppInit() {
 	}
 }
 
+// ControllerInit defines the Interceptor to start the database connection at
+// the begining of each request.
 func ControllerInit() {
 	revel.InterceptMethod((*CouchDBController).Begin, revel.BEFORE) //function to open the database at the start
-	//revel.InterceptMethod((*CouchDBController).End, revel.FINALLY) //function to close the database at the end
+	//revel.InterceptMethod((*CouchDBController).End, revel.FINALLY) //db cleanup at the end of a request
 }
 
+// CouchDBController stores information about the Revel application controller
+// and adds to it the CouchDB connection object and a string containg the URL
+// used in the connection. DBUrl might be removed in the future, it's primarily
+// for testing right now.
 type CouchDBController struct {
 	*revel.Controller
 	Database couch.Database
 	DBUrl    string
 }
 
+// Begin is an interceptor function called at the start of a Revel request. 
+// If the the username and password are defined they are constructed into a 
+// credentials string to be added to the database connection URL. The HTTPS
+// option is also set if defined. The connection URL string is stored into
+// DBUrl and the database object is stored in Database.
 func (c *CouchDBController) Begin() revel.Result {
 	var credentials string
 	var secure string
