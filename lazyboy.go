@@ -8,16 +8,17 @@ import (
 
 var (
 	Url      string
-	Port     string
+	Port     string //optional, will be set to 5984 by default
 	Username string
 	Password string
-	Name     string
+	Database string
+	Https    bool //optional, will be set to false by default
 )
 
 func AppInit() {
 	var found bool
 	if Url, found = revel.Config.String("couchdb.url"); !found {
-		err := errors.New("lazyboy: Database URL not defined in app.conf")
+		err := errors.New("lazyboy: couchdb.url not defined in app.conf")
 		revel.ERROR.Panic(err)
 	}
 
@@ -33,26 +34,44 @@ func AppInit() {
 		Password = ""
 	}
 
-	if Name, found = revel.Config.String("couchdb.name"); !found {
-		err := errors.New("lazyboy: Database name not defined in app.conf")
+	if Database, found = revel.Config.String("couchdb.database"); !found {
+		err := errors.New("lazyboy: couchdb.database not defined in app.conf")
 		revel.ERROR.Panic(err)
+	}
+
+	if Https, found = revel.Config.Bool("couchdb.https"); !found {
+		Https = false
 	}
 }
 
 func ControllerInit() {
-	revel.InterceptMethod((*CouchDBController).Begin, revel.BEFORE)
+	revel.InterceptMethod((*CouchDBController).Begin, revel.BEFORE) //function to open the database at the start
+	//revel.InterceptMethod((*CouchDBController).End, revel.FINALLY) //function to close the database at the end
 }
 
 type CouchDBController struct {
 	*revel.Controller
 	Database couch.Database
-	DBName	string
+	DBUrl    string
 }
 
 func (c *CouchDBController) Begin() revel.Result {
-	dbUrl := "http://" + Url + ":" + Port + "/" + Name
-	c.Database, _ = couch.NewDatabaseByURL(dbUrl)
-	c.DBName = Name
+	var credentials string
+	var secure string
+	if Username != "" && Password != "" {
+		credentials = Username + ":" + Password + "@"
+	} else {
+		credentials = ""
+	}
+
+	if Https {
+		secure = "https://"
+	} else {
+		secure = "http://"
+	}
+
+	c.DBUrl = secure + credentials + Url + ":" + Port + "/" + Database
+	c.Database, _ = couch.NewDatabaseByURL(c.DBUrl)
 
 	return nil
 }
