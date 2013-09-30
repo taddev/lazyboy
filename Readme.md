@@ -15,7 +15,7 @@ module.lazyboy=github.com/taddevries/lazyboy
 couchdb.https=false        	#(bool)   optional, default=false
 couchdb.url=localhost	  	#(string) required
 couchdb.port=5984		  	#(string) optional, default=5984
-couchdb.database=lazyboy	   #(string) required
+couchdb.database=lazyboy	#(string) required
 couchdb.username=admin     	#(string) optional, default=""
 couchdb.password=password  	#(string) optional, default=""
 ```
