@@ -22,17 +22,12 @@ package lazyboy
 
 import (
 	"code.google.com/p/couch-go"
-	"errors"
 	"github.com/robfig/revel"
 )
 
 var (
-	Url      string //required, the URL or IP address to the CouchDB instance
-	Port     string //optional, the port the CouchDB instance is listening on (default=5984)
-	Username string //optional, the username for access to the database (default="")
-	Password string //optional, the password for access to the database (default="")
-	Database string //required, the name of the database
-	Https    bool   //optional, uses HTTPS to make the database connections (default="false")
+	DBUrl    string         //url for couchdb connection
+	Database couch.Database //couchdb database object
 )
 
 // AppInit pulls the configuration options out of the app.conf file in a Revel application
@@ -40,34 +35,71 @@ var (
 // their defaults are set if they are not configured. For required configurations and error
 // message is created and a Panic is send to Revel to kill the application.
 func AppInit() {
-	var found bool
-	if Url, found = revel.Config.String("couchdb.url"); !found {
-		err := errors.New("lazyboy: couchdb.url not defined in app.conf")
-		revel.ERROR.Panic(err)
+	var (
+		url         string //required, the URL or IP address to the CouchDB instance
+		port        string //optional, the port the CouchDB instance is listening on (default=5984)
+		username    string //optional, the username for access to the database (default="")
+		password    string //optional, the password for access to the database (default="")
+		name        string //required, the name of the database
+		https       bool   //optional, uses HTTPS to make the database connections (default="false")
+		found       bool
+		credentials string
+		secure      string
+	)
+
+	if url, found = revel.Config.String("couchdb.url"); !found {
+		//err := errors.New("lazyboy: couchdb.url not defined in app.conf")
+		revel.ERROR.Panic("lazyboy: couchdb.url not defined in app.conf")
 	}
 
-	if Port, found = revel.Config.String("couchdb.port"); !found {
-		Port = "5984"
+	if name, found = revel.Config.String("couchdb.database"); !found {
+		//err := errors.New("lazyboy: couchdb.database not defined in app.conf")
+		revel.ERROR.Panic("lazyboy: couchdb.database not defined in app.conf")
 	}
 
-	if Username, found = revel.Config.String("couchdb.username"); !found {
-		Username = ""
+	/*
+		if Port, found = revel.Config.String("couchdb.port"); !found {
+			Port = "5984"
+		}
+
+		if Username, found = revel.Config.String("couchdb.username"); !found {
+			Username = ""
+		}
+
+		if Password, found = revel.Config.String("couchdb.password"); !found {
+			Password = ""
+		}
+
+		if Https, found = revel.Config.Bool("couchdb.https"); !found {
+			Https = false
+		}
+	*/
+
+	port = revel.Config.StringDefault("coucdb.port", "5984")
+	username = revel.Config.StringDefault("couchdb.username", "")
+	password = revel.Config.StringDefault("couchdb.password", "")
+	https = revel.Config.BoolDefault("couchdb.https", false)
+
+	//build credentials if username and password are set
+	if username != "" && password != "" {
+		credentials = username + ":" + password + "@"
+	} else {
+		credentials = ""
 	}
 
-	if Password, found = revel.Config.String("couchdb.password"); !found {
-		Password = ""
+	//configure https if requested
+	if https {
+		secure = "https://"
+	} else {
+		secure = "http://"
 	}
 
-	if Database, found = revel.Config.String("couchdb.database"); !found {
-		err := errors.New("lazyboy: couchdb.database not defined in app.conf")
-		revel.ERROR.Panic(err)
-	}
-
-	if Https, found = revel.Config.Bool("couchdb.https"); !found {
-		Https = false
-	}
+	//build DBurl and setup couchdb connection
+	DBUrl = secure + credentials + url + ":" + port + "/" + name
+	Database, _ = couch.NewDatabaseByURL(DBUrl)
 }
 
+/*
 // ControllerInit defines the Interceptor to start the database connection at
 // the begining of each request.
 func ControllerInit() {
@@ -82,7 +114,6 @@ func ControllerInit() {
 type CouchDBController struct {
 	*revel.Controller
 	Database couch.Database
-	DBUrl    string
 }
 
 // Begin is an interceptor function called at the start of a Revel request.
@@ -91,22 +122,9 @@ type CouchDBController struct {
 // option is also set if defined. The connection URL string is stored into
 // DBUrl and the database object is stored in Database.
 func (c *CouchDBController) Begin() revel.Result {
-	var credentials string
-	var secure string
-	if Username != "" && Password != "" {
-		credentials = Username + ":" + Password + "@"
-	} else {
-		credentials = ""
-	}
 
-	if Https {
-		secure = "https://"
-	} else {
-		secure = "http://"
-	}
-
-	c.DBUrl = secure + credentials + Url + ":" + Port + "/" + Database
-	c.Database, _ = couch.NewDatabaseByURL(c.DBUrl)
+	c.Database, _ = couch.NewDatabaseByURL(DBUrl)
 
 	return nil
 }
+*/
