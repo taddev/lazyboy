@@ -1,6 +1,19 @@
 ## lazyboy
 Package to wrap the CouchDB initialization for inclusion into the revel framework.
 
+**Table of Contents**
+
+1. [Ex Erratus Scientia](#exerratusscientia)
+2. [Usage](#usage)
+    1. [conf/app.conf](#confappconf)
+    2. [app/init.go](#appinitgo)
+    3. [controllers/init.go](#controllersinitgo)
+3. [Acknowledgments](#acknowledgments)
+4. [License](#license)
+
+## Ex Erratus Scientia
+After some conversation with the Revel group it is clear this not the correct way to handle the connections to CouchDB. I will still leave this here for and example of how to do it wrong. I'm also leaving this here as an example of how to properly document your packages, even if they are wrong.
+
 ## Usage
 To use this package you'll need to *get* it from here and add it as a module to your revel application.
 
