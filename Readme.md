@@ -1,9 +1,6 @@
 ## lazyboy
 Package to wrap the CouchDB initialization for inclusion into the revel framework.
 
-## Corrections
-After some conversation with the Revel group it is clear this not the correct way to handle the connections to CouchDB. I will still leave this here for and example of how to do it wrong. I'm also leaving this here as an example of how to properly document your packages, even if they are wrong.
-
 ## Usage
 To use this package you'll need to *get* it from here and add it as a module to your revel application.
 
@@ -36,25 +33,18 @@ import (
 revel.OnAppStart(lazyboy.AppInit)
 ```
 
-### controllers/init.go
-You'll have to create this file if you haven't already. This will setup the interceptor to call the `ControllerInit()` function when the application starts. 
-
-```go
-package controllers
-
-import (
-	"github.com/taddevries/lazyboy"
-)
-
-func init() {
-	lazyboy.ControllerInit()
-}
-```
-
 ## Acknowledgments 
-I'd like to thank [Jeff Graham][1] and [Herman Schaaf][2] for their work on [various][3] [revmgo][4] packages. These were very helpful in understanding how to build a custom module in revel.
+Thanks to [Jeff Graham][1] and [Herman Schaaf][2] for their work on [various][3] [revmgo][4] packages. These were very helpful in understanding how to build a custom module in revel. I realize that MangoDB and CouchDB are quite different in how they handle their connections, but their work was still helpful.
 
-I'd also like to  thank [Rob Figueiredo][6] for his fine work on [Revel][5]. It is a very interesting and fun framework to work with.
+Thanks to [Rob Figueiredo][6] for his fine work on [Revel][5]. It is a very interesting and fun framework to work with.
+
+Thanks to Andy R. on the Revel group list for helping me better understand how to make things work correctly.
+
+
+## Change Log
+**20130929** Initial upload
+
+**20131001** I've rearranged things quite a bit after talking with Andy R. on the Revel Groups list. I realized that by having things run through an interceptor I was essentially repeating a lot of static items on every request. I moved everything into the `AppInit()` function and have it calling the `NewDatabaseByURL()` only once, by my understanding of the `revel.OnAppStart` function. 
 
 ## License
 Copyright (C) 2013  Tad DeVries <tad@splunk.net>
