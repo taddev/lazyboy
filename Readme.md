@@ -15,7 +15,7 @@ module.lazyboy=github.com/taddevries/lazyboy
 couchdb.https=false         #(bool)   optional, default=false
 couchdb.url=localhost       #(string) required
 couchdb.port=5984           #(string) optional, default=5984
-couchdb.database=lazyboy    #(string) required
+couchdb.name=lazyboy        #(string) required
 couchdb.username=admin      #(string) optional, default=""
 couchdb.password=password   #(string) optional, default=""
 ```
@@ -37,9 +37,6 @@ revel.OnAppStart(lazyboy.AppInit)
 Thanks to [Jeff Graham][1] and [Herman Schaaf][2] for their work on [various][3] [revmgo][4] packages. These were very helpful in understanding how to build a custom module in revel. I realize that MangoDB and CouchDB are quite different in how they handle their connections, but their work was still helpful.
 
 Thanks to [Rob Figueiredo][6] for his fine work on [Revel][5]. It is a very interesting and fun framework to work with.
-
-Thanks to Andy R. on the Revel group list for helping me better understand how to make things work correctly.
-
 
 ## Change Log
 **20130929** Initial upload
