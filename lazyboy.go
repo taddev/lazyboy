@@ -25,6 +25,7 @@ package lazyboy
 import (
 	"code.google.com/p/couch-go"
 	"github.com/robfig/revel"
+	"fmt"
 )
 
 var Database couch.Database //couchdb database object
@@ -38,13 +39,13 @@ func AppInit() {
 	var found bool //logic processing
 
 	//get url from app.conf or error out
-	var url string
+	url := ""
 	if url, found = revel.Config.String("couchdb.url"); !found {
 		revel.ERROR.Panic("lazyboy: couchdb.url not defined in app.conf")
 	}
 
 	//get database name from app.conf or error out
-	var name string
+	name := ""
 	if name, found = revel.Config.String("couchdb.name"); !found {
 		revel.ERROR.Panic("lazyboy: couchdb.name not defined in app.conf")
 	}
@@ -56,22 +57,23 @@ func AppInit() {
 	https := revel.Config.BoolDefault("couchdb.https", false)
 
 	//build credentials if username and password are set
-	var credentials string
+	credentials := ""
 	if username != "" && password != "" {
-		credentials = username + ":" + password + "@"
-	} else {
-		credentials = ""
+		credentials = fmt.Sprintf("%s:%s@", username, password)
 	}
 
 	//configure https if requested
-	var secure string
+	secure := "http"
 	if https {
-		secure = "https://"
-	} else {
-		secure = "http://"
+		secure = "https"
 	}
 
 	//build DBurl and setup couchdb connection
-	dbUrl := secure + credentials + url + ":" + port + "/" + name
-	Database, _ = couch.NewDatabaseByURL(dbUrl)
+	dbUrl := fmt.Sprintf("%s://%s%s:%s/%s", secure, credentials, url, port, name)
+
+	// attempt to connect to the database
+	var err error
+	if Database, err = couch.NewDatabaseByURL(dbUrl); err != nil {
+		revel.ERROR.Panic("lazyboy: error connecting to database")
+	}
 }

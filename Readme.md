@@ -2,9 +2,13 @@
 Package to wrap the CouchDB initialization for inclusion into the revel framework.
 
 ## Usage
-To use this package you'll need to *get* it from here and add it as a module to your revel application.
+To clone this repository and play with the code of source your would have to *get* it.
 
 `go get github.com/taddevries/lazyboy`
+
+Otherwise you can just *install* the package into your $GOPATH, or %GOPATH% for Windows users.
+
+`go install github.com/taddevries/lazyboy`
 
 ### conf/app.conf
 Add this package as a module to your revel application and configure it for use with the connection information as follows.
@@ -34,9 +38,7 @@ revel.OnAppStart(lazyboy.AppInit)
 ```
 
 ## Acknowledgments 
-Thanks to [Jeff Graham][1] and [Herman Schaaf][2] for their work on [various][3] [revmgo][4] packages. These were very helpful in understanding how to build a custom module in revel. I realize that MangoDB and CouchDB are quite different in how they handle their connections, but their work was still helpful.
-
-Thanks to [Rob Figueiredo][6] for his fine work on [Revel][5]. It is a very interesting and fun framework to work with.
+Thanks to [Rob Figueiredo][1] for his fine work on [Revel][2]. It is a very interesting and fun framework to work with.
 
 ## Change Log
 **20130929** Initial upload
@@ -53,9 +55,5 @@ This program is distributed in the hope that it will be useful, but WITHOUT ANY 
 You should have received a copy of the GNU General Public License along with this program.  If not, see [http://www.gnu.org/licenses/].
 
 <!-- Links -->
-[1]: https://github.com/jgraham909 "Jeff Graham"
-[2]: https://github.com/hermanschaaf "Herman Schaaf"
-[3]: https://github.com/jgraham909/revmgo "Jeff's revmgo"
-[4]: https://github.com/hermanschaaf/revmgo "Herman's revmgo"
-[5]: https://github.com/robfig/revel "Revel Framework"
-[6]: https://github.com/robfig "Rob Figueiredo"
+[1]: https://github.com/robfig "Rob Figueiredo"
+[2]: https://github.com/robfig/revel "Revel Framework"
