@@ -6,7 +6,7 @@ To clone this repository and play with the code of source your would have to *ge
 
 `go get github.com/taddevries/lazyboy`
 
-Otherwise you can just *install* the package into your $GOPATH, or %GOPATH% for Windows users.
+Otherwise you can just *install* the package into your $GOPATH.
 
 `go install github.com/taddevries/lazyboy`
 
@@ -24,8 +24,8 @@ couchdb.username=admin      #(string) optional, default=""
 couchdb.password=password   #(string) optional, default=""
 ```
 
-### app/init.go
-Initialize the module by importing the package and calling the `AppInit()` function.
+### controllers/init.go
+Initialize the module by importing the package and calling `lazyboy.AppInit` in the `revel.OnAppStart()` function.
 
 ```go
 import (
