@@ -3,19 +3,8 @@
    framework.
 
    Copyright (C) 2013  Tad DeVries <tad@splunk.net>
-
-   This program is free software: you can redistribute it and/or modify
-   it under the terms of the GNU General Public License as published by
-   the Free Software Foundation, either version 3 of the License, or
-   (at your option) any later version.
-
-   This program is distributed in the hope that it will be useful,
-   but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-   GNU General Public License for more details.
-
-   You should have received a copy of the GNU General Public License
-   along with this program.  If not, see [http://www.gnu.org/licenses/].
+   http://opensource.org/licenses/mit-license.php
+  
 */
 
 // Package lazyboy wraps a CouchDB connection into a module for use with the
@@ -24,11 +13,12 @@ package lazyboy
 
 import (
 	"code.google.com/p/couch-go"
-	"github.com/robfig/revel"
 	"fmt"
+	"github.com/robfig/revel"
 )
 
 var Database couch.Database //couchdb database object
+var DBUrl string
 
 // AppInit pulls the configuration options out of the app.conf file in a Revel
 // application and stores them locally for use in the database connection.
@@ -69,11 +59,11 @@ func AppInit() {
 	}
 
 	//build DBurl and setup couchdb connection
-	dbUrl := fmt.Sprintf("%s://%s%s:%s/%s", secure, credentials, url, port, name)
+	DBUrl = fmt.Sprintf("%s://%s%s:%s/%s", secure, credentials, url, port, name)
 
 	// attempt to connect to the database
 	var err error
-	if Database, err = couch.NewDatabaseByURL(dbUrl); err != nil {
+	if Database, err = couch.NewDatabaseByURL(DBUrl); err != nil {
 		revel.ERROR.Panic("lazyboy: error connecting to database")
 	}
 }
