@@ -4,7 +4,7 @@
 
    Copyright (C) 2013  Tad DeVries <tad@splunk.net>
    http://opensource.org/licenses/mit-license.php
-  
+
 */
 
 // Package lazyboy wraps a CouchDB connection into a module for use with the
@@ -14,7 +14,7 @@ package lazyboy
 import (
 	"code.google.com/p/couch-go"
 	"fmt"
-	"github.com/robfig/revel"
+	"github.com/revel/revel"
 )
 
 var Database couch.Database //couchdb database object
