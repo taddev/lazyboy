@@ -14,17 +14,17 @@ Package to wrap the CouchDB initialization for inclusion into the revel framewor
 ## Usage
 To clone this repository and play with the code of source your would have to *get* it.
 
-`go get github.com/taddevries/lazyboy`
+`go get github.com/taddev/lazyboy`
 
 Otherwise you can just *install* the package into your $GOPATH.
 
-`go install github.com/taddevries/lazyboy`
+`go install github.com/taddev/lazyboy`
 
 ### conf/app.conf
 Add this package as a module to your revel application and configure it for use with the connection information as follows.
 
 ```
-module.lazyboy=github.com/taddevries/lazyboy
+module.lazyboy=github.com/taddev/lazyboy
 
 couchdb.https=false         #(bool)   optional, default=false
 couchdb.url=localhost       #(string) required
@@ -39,8 +39,8 @@ Initialize the module by importing the package and calling `lazyboy.AppInit` in 
 
 ```go
 import (
-	"github.com/robfig/revel"
-	"github.com/taddevries/lazyboy"
+	"github.com/revel/revel"
+	"github.com/taddev/lazyboy"
 )
 
 //call AppInit at the bottom of init.go like so
