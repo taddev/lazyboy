@@ -2,8 +2,8 @@
    Package to wrap the CouchDB initialization for inclusion into the revel
    framework.
 
-   Copyright (C) 2013  Tad DeVries <tad@splunk.net>
-   http://opensource.org/licenses/mit-license.php
+   Copyright (C) 2013-2014  Tad DeVries <tad@splunk.net>
+   http://tad.mit-license.org/2013
 
 */
 

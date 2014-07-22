@@ -56,8 +56,8 @@ Thanks to [Rob Figueiredo][1] for his fine work on [Revel][2]. It is a very inte
 **20131001** I've rearranged things quite a bit after talking with Andy R. on the Revel Groups list. I realized that by having things run through an interceptor I was essentially repeating a lot of static items on every request. I moved everything into the `AppInit()` function and have it calling the `NewDatabaseByURL()` only once, by my understanding of the `revel.OnAppStart` function. 
 
 ## License
-Copyright (C) 2013  Tad DeVries <tad@splunk.net>
-http://opensource.org/licenses/mit-license.php
+Copyright (C) 2013-2014  Tad DeVries <tad@splunk.net>
+http://tad.mit-license.org/2013
 
 
 <!-- Links -->
